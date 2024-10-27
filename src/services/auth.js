@@ -1,8 +1,8 @@
 import createHttpError from 'http-errors';
-import { UsersCollection } from '../models/user.js';
+import { UsersCollection } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
 
-import { SessionsCollection } from '../models/session.js';
+import { SessionsCollection } from '../db/models/session.js';
 import { createSession } from '../utils/createSession.js';
 
 export const registerUser = async (payload) => {
