@@ -31,31 +31,28 @@ export const getAllContacts = async ({
   return { contacts, ...paginationData };
 };
 
-export const getContactById = async (contactId) => {
-  const contact = await contactsCollection.findById(contactId);
+export const getContactById = async (contactId, userId) => {
+  const contact = await contactsCollection.findOne({ userId, _id: contactId });
   return contact;
 };
-export const createContact = async (payload) => {
-  const contact = await contactsCollection.create(payload);
+export const createContact = async (payload, userId) => {
+  const contact = await contactsCollection.create({ userId, ...payload });
   return contact;
 };
-export const updateContact = async (contactId, payload) => {
+export const updateContact = async (contactId, payload, userId) => {
   const rawResult = await contactsCollection.findOneAndUpdate(
-    { _id: contactId },
+    { _id: contactId, userId },
     { $set: payload },
-    {
-      new: true,
-      includeResultMetadata: true,
-    },
+    { new: true },
   );
-
   if (!rawResult || !rawResult.value) return null;
 
   return rawResult.value;
 };
-export const deleteContact = async (contactId) => {
+export const deleteContact = async (contactId, userId) => {
   const contact = await contactsCollection.findOneAndDelete({
     _id: contactId,
+    userId,
   });
 
   return contact;
