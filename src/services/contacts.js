@@ -40,16 +40,12 @@ export const createContact = async (payload, userId) => {
   const contact = await contactsCollection.create({ userId, ...payload });
   return contact;
 };
-export const updateContact = async (contactId, payload, userId) => {
-  const rawResult = await contactsCollection.findOneAndUpdate(
+export const updateContact = (contactId, contact, userId) =>
+  contactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
-    { $set: payload },
+    { $set: contact },
     { new: true },
   );
-  if (!rawResult || !rawResult.value) return null;
-
-  return rawResult.value;
-};
 export const deleteContact = async (contactId, userId) => {
   const contact = await contactsCollection.findOneAndDelete({
     _id: contactId,
