@@ -15,7 +15,6 @@ import {
 } from '../controllers/auth.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
 router.post(
@@ -34,7 +33,6 @@ export default router;
 
 router.post(
   '/send-reset-email',
-  authenticate,
   validateBody(sendResetEmailSchema),
   ctrlWrapper(sendResetEmailController),
 );
