@@ -1,0 +1,42 @@
+description: Unauthorized error
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: 'UnauthorizedError'
+        data:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              enum:
+                - 'Session not found'
+                - 'Access token expired'
+              example: 'Session not found'
+    examples:
+      sessionNotFound:
+        summary: 'Session not found'
+        value:
+          status: 401
+          message: 'UnauthorizedError'
+          data:
+            message: 'Session not found'
+      accessTokenExpired:
+        summary: 'Access token expired'
+        value:
+          status: 401
+          message: 'UnauthorizedError'
+          data:
+            message: 'Access token expired'
