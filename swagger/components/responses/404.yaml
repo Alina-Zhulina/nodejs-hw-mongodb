@@ -24,6 +24,7 @@ content:
               enum:
                 - 'Route not found'
                 - 'Contact not found'
+                - 'User not found'
               example: 'Route not found'
     examples:
       routeNotFound:
@@ -40,3 +41,10 @@ content:
           message: 'NotFoundError'
           data:
             message: 'Contact not found'
+      userNotFound:
+        summary: 'User not found'
+        value:
+          status: 404
+          message: 'NotFoundError'
+          data:
+            message: 'User not found'

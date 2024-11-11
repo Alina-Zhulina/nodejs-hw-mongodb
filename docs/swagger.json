@@ -11,9 +11,6 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
-    },
-    {
       "url": "https://nodejs-hw-mongodb-4coj.onrender.com"
     }
   ],
@@ -505,6 +502,399 @@
           }
         }
       }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register User",
+        "operationId": "registerUser",
+        "description": "Register user with provided details",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "User's name (minimum 3 characters, maximum 20 characters)",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 20,
+                    "example": "Anna Hryhorash"
+                  },
+                  "email": {
+                    "description": "User's email address",
+                    "type": "string",
+                    "format": "email",
+                    "example": "example@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "yourpassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "description": "HTTP status code indicating success",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login User",
+        "operationId": "loginUser",
+        "description": "Login user in app system",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email address",
+                    "type": "string",
+                    "format": "email",
+                    "example": "example@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "yourpassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in an user!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "description": "HTTP status code indicating success",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "JWT access token for authenticated user",
+                          "example": "z5vu7q9h87KAe1ghvoHkm57IBa+Cl3ZMUCX6wwa8"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout User",
+        "operationId": "logoutUser",
+        "description": "Logs the user out of the system by clearing session cookies and deleting the session from the database. Requires valid authentication token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully logged out the user. The session is deleted, and cookies are cleared."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh User Session",
+        "operationId": "refreshUserSession",
+        "description": "Refreshes the user session by validating the refresh token and session ID from the cookies, creating a new session, and returning a new access token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully refreshed the session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "description": "HTTP status code indicating success",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message",
+                      "example": "Successfully refreshed a session!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "New JWT access token for the user.",
+                          "example": "newAccessToken123"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send password reset email",
+        "operationId": "sendResetEmail",
+        "description": "Sends a password reset email to the user with a link to reset the password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The email address associated with the user account.",
+                    "example": "example@mail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email has been successfully sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "description": "HTTP status code indicating success.",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message that the email has been sent.",
+                      "example": "Reset password email has been successfully sent."
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Empty object, as no additional data is returned.",
+                      "additionalProperties": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/reset_password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset Password",
+        "operationId": "resetPassword",
+        "description": "Allows a user to reset their password by providing a valid token received via email.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "description": "The new password to be set for the user.",
+                    "example": "newPassword1234"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "The token received via email to verify the reset request.",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YjE0NjMxZC1hNDRjLTQxNjItYjQ5YjM0ZDE0MzZkZiIsImVtYWlsIjoic2FtcGxlQGVtYWlsLmNvbSIsImlhdCI6MTYyNTI4OTQwNSwiZXhwIjoxNjI1MjkzMDA1fQ.MfkwD6m3g6fyqLMv4LZIrBBhQwexg1-Lf8lhP9rC7Qw"
+                  }
+                },
+                "required": [
+                  "password",
+                  "token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password has been successfully reset.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "description": "HTTP status code indicating success.",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message indicating the password has been updated.",
+                      "example": "Password has been successfully reset."
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Empty object as no additional data is returned."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -579,6 +969,41 @@
             "type": "string",
             "format": "date-time",
             "example": "2024-11-10T14:48:00.000Z"
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier of the user in the database",
+            "example": "6731fce0d433c452914ab846"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name (minimum 3 characters, maximum 20 characters)",
+            "minLength": 3,
+            "maxLength": 20,
+            "example": "Anna Hryhorash"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email address",
+            "format": "email",
+            "example": "example@mail.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Timestamp when the user was created",
+            "format": "date-time",
+            "example": "2024-11-11T12:47:28.503Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Timestamp when the user data was last updated",
+            "format": "date-time",
+            "example": "2024-11-11T12:47:28.503Z"
           }
         }
       }
@@ -677,7 +1102,8 @@
                       "type": "string",
                       "enum": [
                         "Session not found",
-                        "Access token expired"
+                        "Access token expired or invalid",
+                        "User not found"
                       ],
                       "example": "Session not found"
                     }
@@ -696,13 +1122,23 @@
                   }
                 }
               },
-              "accessTokenExpired": {
-                "summary": "Access token expired",
+              "userNotFound": {
+                "summary": "User not found",
                 "value": {
                   "status": 401,
                   "message": "UnauthorizedError",
                   "data": {
-                    "message": "Access token expired"
+                    "message": "User not found"
+                  }
+                }
+              },
+              "accessTokenExpiredOrInvalid": {
+                "summary": "Access token expired or invalid",
+                "value": {
+                  "status": 401,
+                  "message": "UnauthorizedError",
+                  "data": {
+                    "message": "Access token expired or invalid"
                   }
                 }
               }
@@ -740,7 +1176,8 @@
                       "type": "string",
                       "enum": [
                         "Route not found",
-                        "Contact not found"
+                        "Contact not found",
+                        "User not found"
                       ],
                       "example": "Route not found"
                     }
@@ -767,6 +1204,90 @@
                   "data": {
                     "message": "Contact not found"
                   }
+                }
+              },
+              "userNotFound": {
+                "summary": "User not found",
+                "value": {
+                  "status": 404,
+                  "message": "NotFoundError",
+                  "data": {
+                    "message": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "ConflictError",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ConflictError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "enum": [
+                        "Email in use"
+                      ],
+                      "example": "Session not found"
+                    }
+                  }
+                }
+              }
+            },
+            "examples": {
+              "EmailInUse": {
+                "summary": "Email in use",
+                "value": {
+                  "status": 409,
+                  "message": "ConflictError",
+                  "data": {
+                    "message": "Email in use"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error. The email could not be sent due to a server issue.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "description": "HTTP status code indicating failure.",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message indicating the failure in sending the email.",
+                  "example": "Failed to send the email, please try again later."
                 }
               }
             }

@@ -1,0 +1,27 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: 'Unique identifier of the user in the database'
+    example: '6731fce0d433c452914ab846'
+  name:
+    type: string
+    description: "User's name (minimum 3 characters, maximum 20 characters)"
+    minLength: 3
+    maxLength: 20
+    example: 'Anna Hryhorash'
+  email:
+    type: string
+    description: "User's email address"
+    format: email
+    example: 'example@mail.com'
+  createdAt:
+    type: string
+    description: 'Timestamp when the user was created'
+    format: date-time
+    example: '2024-11-11T12:47:28.503Z'
+  updatedAt:
+    type: string
+    description: 'Timestamp when the user data was last updated'
+    format: date-time
+    example: '2024-11-11T12:47:28.503Z'

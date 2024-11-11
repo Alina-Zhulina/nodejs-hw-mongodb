@@ -23,7 +23,8 @@ content:
               type: string
               enum:
                 - 'Session not found'
-                - 'Access token expired'
+                - 'Access token expired or invalid'
+                - 'User not found'
               example: 'Session not found'
     examples:
       sessionNotFound:
@@ -33,10 +34,17 @@ content:
           message: 'UnauthorizedError'
           data:
             message: 'Session not found'
-      accessTokenExpired:
-        summary: 'Access token expired'
+      userNotFound:
+        summary: 'User not found'
         value:
           status: 401
           message: 'UnauthorizedError'
           data:
-            message: 'Access token expired'
+            message: 'User not found'
+      accessTokenExpiredOrInvalid:
+        summary: 'Access token expired or invalid'
+        value:
+          status: 401
+          message: 'UnauthorizedError'
+          data:
+            message: 'Access token expired or invalid'

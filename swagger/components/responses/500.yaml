@@ -1,0 +1,14 @@
+description: 'Internal Server Error. The email could not be sent due to a server issue.'
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: 'HTTP status code indicating failure.'
+          example: 500
+        message:
+          type: string
+          description: 'Error message indicating the failure in sending the email.'
+          example: 'Failed to send the email, please try again later.'

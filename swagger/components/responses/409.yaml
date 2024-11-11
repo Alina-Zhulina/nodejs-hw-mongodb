@@ -1,0 +1,42 @@
+description: ConflictError
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: 'ConflictError'
+        data:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              enum:
+                - 'Email in use'
+                # - 'Access token expired'
+              example: 'Session not found'
+    examples:
+      EmailInUse:
+        summary: 'Email in use'
+        value:
+          status: 409
+          message: 'ConflictError'
+          data:
+            message: 'Email in use'
+      # accessTokenExpired:
+      #   summary: 'Access token expired'
+      #   value:
+      #     status: 409
+      #     message: 'ConflictError'
+      #     data:
+      #       message: 'Access token expired'
